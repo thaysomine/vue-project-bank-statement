@@ -14,6 +14,22 @@ export default defineNuxtConfig({
       })
     },
   ],
+   hooks: {
+    'vite:extendConfig': (config) => {
+      config.plugins?.push(
+        vuetify({
+          styles: {
+            configFile: './assets/settings.scss',
+          },
+        }),
+      )
+    },
+  },
+  css: [
+    '@mdi/font/css/materialdesignicons.min.css',
+    'vuetify/styles',
+    '~/assets/styles/_global.scss',
+  ],
   vite: {
     optimizeDeps: {
       include: ['pdfjs-dist'],
@@ -35,6 +51,13 @@ export default defineNuxtConfig({
     vue: {
       template: {
         transformAssetUrls,
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        sass: {
+          api: 'modern',
+        },
       },
     },
   },

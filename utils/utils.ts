@@ -29,6 +29,19 @@ export const getInitials = (name: string | null | undefined) => {
   const names = name.trim().split(' ')
   return `${names[0][0]}${names[names.length > 1 ? 1 : 0][names.length > 1 ? 0 : 1]}`
 }
+export const getFileNameFromSrc = (src: string) => {
+  const regex = /\/([^\/?]+)\?/
+  const match = decodeURIComponent(src).match(regex)
+
+  if (match && match[1]) {
+    // Decode URL-encoded characters
+    const filename = decodeURIComponent(match[1])
+    return filename
+  }
+  else {
+    return null
+  }
+}
 
 export const orderOptions = <T extends KeyMap>(arr: T[]) => {
   const options = arr.sort((a, b) => {

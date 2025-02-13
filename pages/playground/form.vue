@@ -1,3 +1,6 @@
+
+<script lang="ts" setup></script>
+
 <template>
   <v-container>
     <v-row>
@@ -6,9 +9,9 @@
           <v-card-title>Form</v-card-title>
           <v-card-text>
             <v-form>
-              <v-row>
+              <v-row >
                 <v-col cols="12" sm="6">
-                <f-form-input label="First Name" />
+                <f-form-input label="First Name" color="primary"/>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <f-form-autocomplete label="First Name" />
@@ -19,11 +22,11 @@
 
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <f-form-file-upload label="First Name" />
+                  <!-- <f-form-file-upload label="First Name" /> -->
 
                 </v-col>
-                <v-col cols="12" sm="6">
-                  <f-form-image-upload label="First Name" />
+                <v-col cols="12" sm="4" class="d-flex">
+                  <f-form-image-upload label="First Name" height="auto" class="ar-1 flex-grow-1" />
 
                 </v-col>
                 <v-col cols="12" sm="6">
@@ -38,7 +41,5 @@
     </v-row>
   </v-container>
 </template>
-
-<script lang="ts" setup></script>
 
 <style></style>

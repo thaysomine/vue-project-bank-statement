@@ -44,7 +44,7 @@ onMounted(() => {
 
 <template>
   <v-text-field ref="textElement" v-model="valueLocal" :bg-color="bgColor" hide-details="auto" :name="name"
-    :rules="rules" variant="outlined" :rounded="rounded">
+    :rules="rules" variant="solo" :rounded="rounded">
     <template #label>
       <span class="font-weight-bold bg-card px-1 rounded">{{ label }}</span>
       <span v-if="required" class="text-error font-weight-black ml-1">*</span>

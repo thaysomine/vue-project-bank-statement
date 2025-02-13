@@ -1,0 +1,36 @@
+.cursor {
+  &-pointer {
+    cursor: pointer !important;
+  }
+  &-draw {
+    cursor: url(~/assets/cursors/draw.png), auto !important;
+  }
+  &-line {
+    cursor: url(~/assets/cursors/line.png), auto !important;
+  }
+  &-wipeout {
+    cursor: url(~/assets/cursors/wipeout.png), auto !important;
+  }
+  &-text {
+    cursor: url(~/assets/cursors/text.png), auto !important;
+  }
+  &-cloud {
+    cursor: url(~/assets/cursors/cloud.png), auto !important;
+  }
+  &-measure {
+    cursor: url(~/assets/cursors/measure.png), auto !important;
+  }
+  &-components {
+    cursor: crosshair !important;
+  }
+  &-furniture {
+    cursor: crosshair !important;
+  }
+  &-crosshair {
+    cursor: crosshair !important;
+  }
+  &-click {
+    cursor: pointer !important;
+    user-select: none;
+  }
+}

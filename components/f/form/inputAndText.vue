@@ -42,7 +42,7 @@
 </script>
 
 <template>
-  <aterra-input
+  <f-form-input
     v-if="isEditing"
     v-model="valueLocal"
     v-click-outside="{

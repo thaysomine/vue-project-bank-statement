@@ -4,7 +4,7 @@
 const props = withDefaults(defineProps<{
   modelValue?: any
   label: string
-  items: Array<T>
+  items?: Array<T>
   required?: boolean
   returnObject?: boolean
   multiple?: boolean
@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<{
   autoSelectFirst?: boolean
 }>(), {
   rounded: 'lg',
+  items: () =>[] as Array<T>,
 })
 
 const emit = defineEmits<{

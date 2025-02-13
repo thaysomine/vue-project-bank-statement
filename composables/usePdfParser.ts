@@ -3,7 +3,14 @@ import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 
 export function usePdfParser() {
-  async function pdfToJson(file: File): Promise<Array<{ Data: string; Descrição: string; Tipo: string; Valor: string; Categoria: string }>> {
+  async function pdfToJson(file: File): Promise<Array<{ 
+    date: number; 
+    description: string; 
+    type: string; 
+    value: number;
+    movement: string; 
+    category?: string 
+  }>> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
@@ -26,6 +33,8 @@ export function usePdfParser() {
           const lines = textContent.split("\n").map(line => line.trim()).filter(line => line);
           console.log(lines);
           const transactions = parseBankStatement(lines);
+          const categorizedTransactions = separateByCategory(transactions);
+          console.log(categorizedTransactions);
 
           resolve(transactions);
         } catch (err) {

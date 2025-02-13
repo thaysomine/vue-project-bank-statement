@@ -1,8 +1,19 @@
+import type { DateTime } from "luxon";
+import { parse } from "vue/compiler-sfc";
+import { parseDateToMillis } from "~/utils/utils";
+
 export function parseBankStatement(lines: string[]) {
-  const bankStatement: Array<{ Data: string; Descrição: string; Tipo: string; Valor: string; Categoria: string }> = [];
+  const bankStatement: Array<{ 
+    date: number; 
+    description: string; 
+    type: string; 
+    value: number;
+    movement: string; 
+    category?: string 
+  }> = [];
 
   let currentDate = "";
-  let currentCategory = "";
+  let currentmovement = "";
   let transactionBuffer: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -16,11 +27,11 @@ export function parseBankStatement(lines: string[]) {
 
     // Identifica categorias de transação
     if (line.includes("Total de entradas")) {
-      currentCategory = "Entrada";
+      currentmovement = "Entrada";
       continue;
     }
     if (line.includes("Total de saídas")) {
-      currentCategory = "Saída";
+      currentmovement = "Saída";
       continue;
     }
 
@@ -44,22 +55,31 @@ export function parseBankStatement(lines: string[]) {
 
       // Se a última linha é um valor numérico válido, processa a transação
       if (/^-?\d+,\d{2}$/.test(line)) {
-        const tipo = transactionBuffer[0]; // O tipo está na primeira linha do buffer
-        const descricao = transactionBuffer.slice(1, -1).join(" "); // Junta as linhas da descrição
-        const valor = transactionBuffer[transactionBuffer.length - 1]; // O valor está na última linha do buffer
+        const type = transactionBuffer[0]; // O tipo está na primeira linha do buffer
+        const description = transactionBuffer.slice(1, -1).join(" "); // Junta as linhas da descrição
+        const value = transactionBuffer[transactionBuffer.length - 1]; // O valor está na última linha do buffer
+        const newDate = parseDateToMillis(currentDate);
+        console.log(newDate);
+
+        //const category = classifyCategory(description, type);
 
         bankStatement.push({
-          Data: currentDate,
-          Descrição: descricao,
-          Tipo: tipo,
-          Valor: valor,
-          Categoria: currentCategory
+          date: newDate,
+          description: description,
+          type: type,
+          value: value? parseFloat(value.replace(",", ".")) : 0,
+          movement: currentmovement,
         });
 
         transactionBuffer = []; // Limpa o buffer após salvar a transação
       }
     }
   }
+  const groupedTransactions = groupTransactionsByDescription(bankStatement);
+  const categorizedTransactions = groupedTransactions.map(transaction => ({
+    ...transaction,
+    category: classifyCategory(transaction.description, transaction.type),
+  }));
 
-  return bankStatement;
+  return categorizedTransactions;
 }

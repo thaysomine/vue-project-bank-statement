@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "luxon": "^3.5.0",
     "nuxt": "^3.15.4",
     "pdf-parse": "^1.1.1",
     "pdfjs": "^2.5.3",
@@ -19,6 +20,7 @@
     "vue-router": "latest"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "@types/pdf-parse": "^1.1.4",
     "@types/pdfjs-dist": "^2.10.378",
     "sass-embedded": "^1.83.4",

@@ -2,7 +2,7 @@
 definePageMeta({
   layout: "default",
 });
-const files = ref<File[] | null>(null);
+const files = ref<File | null>(null);
 const transactions = ref<Transaction[]>([]);
 const categorizedTransactions = ref<Transaction[]>([]);
 const isLoading = ref(false);
@@ -18,7 +18,7 @@ const userHeaders = [
 
 const { pdfToJson } = usePdfParser();
 
-async function parseFiles(files: File[] | File | null) {
+async function parseFiles(files: File[] | File | null | undefined) {
   console.log(`files: ${files}; isArray: ${Array.isArray(files)}`);
   if (!files || Array.isArray(files)) return;
   const file = files;
@@ -59,13 +59,7 @@ const totalSpent = computed(() => {
   <template v-if="transactions.length === 0">
     <div class="d-flex align-center justify-center h-100 position-relative flex-column">
       <h1 class="title">Organize your expenses in a simple way</h1>
-      <div>
-        <v-row justify="center">
-          <v-col cols="12" class="mt-5 font-weight-bold text-h4 text-center filter-shadow text-grey-darken-4">
-            <v-file-input v-model="files" @update:model-value="parseFiles" label="File input"></v-file-input>
-          </v-col>
-        </v-row>
-      </div>
+      <f-form-image-upload class="ar-1 w-25" height="auto" squared v-model="files" @update:model-value="parseFiles" label="File input"></f-form-image-upload>
       <p class="subtitle">Drag and drop or click to upload your bank statement</p>
     </div>
   </template>

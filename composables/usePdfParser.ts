@@ -3,14 +3,7 @@ import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 
 export function usePdfParser() {
-  async function pdfToJson(file: File): Promise<Array<{ 
-    date: number; 
-    description: string; 
-    type: string; 
-    value: number;
-    movement: string; 
-    category?: string 
-  }>> {
+  async function pdfToJson(file: File): Promise<TransactionItem[]> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 

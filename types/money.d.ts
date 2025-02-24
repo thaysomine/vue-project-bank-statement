@@ -1,8 +1,19 @@
-interface Transaction {
-    date: number,
-    description: string,
-    type: string,
-    value: number,
-    movement: string,
-    category?: string
-  }
+interface TransactionCommon {
+  description: string,
+  type: string,
+  value: number,
+}
+
+interface TransactionGroup extends TransactionCommon {
+  type: 'group',
+  dateRange: [number, number],
+  items: Transaction[],
+}
+
+interface TransactionItem extends TransactionCommon {
+  type: 'Entrada' | 'Saída',
+  date: number,
+  method: string,
+}
+
+type Transaction = TransactionGroup | TransactionItem

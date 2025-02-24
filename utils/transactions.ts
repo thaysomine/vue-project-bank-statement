@@ -45,15 +45,52 @@ export function classifyCategory(description: string, type: string): string {
   }
   
 
-  export function separateByCategory(transactions: any[]) {
-    const categorized: { [key: string]: any[] } = {};
-  
-    transactions.forEach(transaction => {
-      if (!categorized[transaction.category]) {
-        categorized[transaction.category] = [];
+  // export function separateByCategory(transactions: TransactionItem[]): Transaction[] {
+  //   const parsedTransactions = transactions.reduce((parsed, transaction) => {
+  //     const category = classifyCategory(transaction.description, transaction.type);
+  //     const group = parsed.find(group => group.type === 'group' && group.description === category) as TransactionGroup | undefined;
+  //     if (group) {
+  //       group.value += transaction.value;
+  //       group.items.push(transaction);
+  //     } else {
+  //       parsed.push({
+  //         type: 'group',
+  //         dateRange: [0, 0],
+  //         description: category,
+  //         value: transaction.value,
+  //         items: [transaction],
+  //       });
+  //     }
+  //     return parsed;
+  //   }, [] as Transaction[]);
+  //   console.log('parsedTransactions', parsedTransactions);
+  //   return parsedTransactions;
+  // }
+
+  export function separateByCategory(transactions: TransactionItem[]): { [key: string]: Transaction[] } {
+    return transactions.reduce((parsed, transaction) => {
+      const category = classifyCategory(transaction.description, transaction.type);
+      
+      // Se a categoria ainda não existe, cria um grupo vazio
+      if (!parsed[category]) {
+        parsed[category] = [];
       }
-      categorized[transaction.category].push(transaction);
-    });
   
-    return categorized;
+      // Adiciona a transação ao grupo correto
+      parsed[category].push(transaction);
+      console.log('parsed', parsed);
+      return parsed;
+    }, {} as { [key: string]: Transaction[] });
+  }
+
+  export function unwrapGroup(options: FsPlanOption[], group: FsPlanOptionGroup | null = null): FsPlanOption[] {
+    const flatOptions = options.flatMap(option => {
+      if (option.type === 'group' && option.options) {
+        for (const opt of option.options) {
+          opt.depth = (group?.depth || 0) + 1
+        }
+      }
+      return option.type === 'group' ? unwrapGroup(option.options, option) : option
+    })
+    return group ? [group as FsPlanOption].concat(flatOptions) : flatOptions
   }

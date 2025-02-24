@@ -2,18 +2,11 @@ import type { DateTime } from "luxon";
 import { parse } from "vue/compiler-sfc";
 import { parseDateToMillis } from "~/utils/utils";
 
-export function parseBankStatement(lines: string[]) {
-  const bankStatement: Array<{ 
-    date: number; 
-    description: string; 
-    type: string; 
-    value: number;
-    movement: string; 
-    category?: string 
-  }> = [];
+export function parseBankStatement(lines: string[]): TransactionItem[] {
+  const bankStatement: TransactionItem[] = [];
 
   let currentDate = "";
-  let currentmovement = "";
+  let currentType: "Entrada" | "Saída" = "Entrada";
   let transactionBuffer: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -27,11 +20,11 @@ export function parseBankStatement(lines: string[]) {
 
     // Identifica categorias de transação
     if (line.includes("Total de entradas")) {
-      currentmovement = "Entrada";
+      currentType = "Entrada";
       continue;
     }
     if (line.includes("Total de saídas")) {
-      currentmovement = "Saída";
+      currentType = "Saída";
       continue;
     }
 
@@ -55,7 +48,7 @@ export function parseBankStatement(lines: string[]) {
 
       // Se a última linha é um valor numérico válido, processa a transação
       if (/^-?\d+,\d{2}$/.test(line)) {
-        const type = transactionBuffer[0]; // O tipo está na primeira linha do buffer
+        const method = transactionBuffer[0]; // O tipo está na primeira linha do buffer
         const description = transactionBuffer.slice(1, -1).join(" "); // Junta as linhas da descrição
         const value = transactionBuffer[transactionBuffer.length - 1]; // O valor está na última linha do buffer
         const newDate = parseDateToMillis(currentDate);
@@ -66,9 +59,9 @@ export function parseBankStatement(lines: string[]) {
         bankStatement.push({
           date: newDate,
           description: description,
-          type: type,
+          method: method,
           value: value? parseFloat(value.replace(",", ".")) : 0,
-          movement: currentmovement,
+          type: currentType,
         });
 
         transactionBuffer = []; // Limpa o buffer após salvar a transação

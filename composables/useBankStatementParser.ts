@@ -6,7 +6,7 @@ export function parseBankStatement(lines: string[]): TransactionItem[] {
   const bankStatement: TransactionItem[] = [];
 
   let currentDate = "";
-  let currentType: "Entrada" | "Saída" = "Entrada";
+  let currentType: "item" = "item";
   let transactionBuffer: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -20,11 +20,11 @@ export function parseBankStatement(lines: string[]): TransactionItem[] {
 
     // Identifica categorias de transação
     if (line.includes("Total de entradas")) {
-      currentType = "Entrada";
+      currentType = "item";
       continue;
     }
     if (line.includes("Total de saídas")) {
-      currentType = "Saída";
+      currentType = "item";
       continue;
     }
 

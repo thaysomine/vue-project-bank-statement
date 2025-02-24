@@ -11,7 +11,7 @@ interface TransactionGroup extends TransactionCommon {
 }
 
 interface TransactionItem extends TransactionCommon {
-  type: 'Entrada' | 'Saída',
+  type: 'item',
   date: number,
   method: string,
 }

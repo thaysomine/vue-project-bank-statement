@@ -67,20 +67,30 @@ export function classifyCategory(description: string, type: string): string {
   //   return parsedTransactions;
   // }
 
-  export function separateByCategory(transactions: TransactionItem[]): { [key: string]: Transaction[] } {
+  export function separateByCategory(transactions: TransactionItem[]): Transaction[]  {
     return transactions.reduce((parsed, transaction) => {
       const category = classifyCategory(transaction.description, transaction.type);
-      
-      // Se a categoria ainda não existe, cria um grupo vazio
-      if (!parsed[category]) {
-        parsed[category] = [];
+      const foundGroup = parsed.find(group => group.type === 'group' && group.description === category) as TransactionGroup | undefined;
+
+      if (!foundGroup) {
+        parsed.push({
+          type: 'group',
+          dateRange: [transaction.date, transaction.date],
+          description: category,
+          value: transaction.value,
+          items: [transaction],
+        });
+       return parsed
       }
-  
-      // Adiciona a transação ao grupo correto
-      parsed[category].push(transaction);
-      console.log('parsed', parsed);
+
+      foundGroup.value += transaction.value;
+      foundGroup.dateRange[0] = Math.min(foundGroup.dateRange[0], transaction.date);
+      foundGroup.dateRange[1] = Math.max(foundGroup.dateRange[1], transaction.date);
+      foundGroup.items.push(transaction);
+      
       return parsed;
-    }, {} as { [key: string]: Transaction[] });
+  
+    }, [] as Transaction[] );
   }
 
   export function unwrapGroup(options: FsPlanOption[], group: FsPlanOptionGroup | null = null): FsPlanOption[] {

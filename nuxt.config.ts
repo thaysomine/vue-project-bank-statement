@@ -13,7 +13,22 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
+    '@vueuse/nuxt',
+    // https://pinia.vuejs.org/ssr/nuxt.html
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: [
+          'defineStore',
+          ['defineStore', 'definePiniaStore'],
+        ],
+      },
+    ],
+    '@pinia-plugin-persistedstate/nuxt',
+    '@vite-pwa/nuxt',
+
   ],
+
   hooks: {
     'vite:extendConfig': (config) => {
       config.plugins?.push(
@@ -28,8 +43,11 @@ export default defineNuxtConfig({
   css: [
     '@mdi/font/css/materialdesignicons.min.css',
     'vuetify/styles',
-    '~/assets/styles/_global.scss',
+    '~/assets/styles/_global.scss'
   ],
+
+  ssr: false,
+
   vite: {
     optimizeDeps: {
       include: ['pdfjs-dist'],
@@ -52,6 +70,13 @@ export default defineNuxtConfig({
       template: {
         transformAssetUrls,
       },
+    },
+
+  },
+  runtimeConfig: {
+    public: {
+      backEndUrl: process.env.NUXT_BACKEND_URL,
+      buildMode: process.env.NUXT_BUILD_MODE,
     },
   },
 });

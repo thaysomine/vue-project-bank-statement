@@ -97,7 +97,7 @@
       <!-- <v-btn v-if="prevStory" @click="page--" color="primary" icon="mdi-arrow-left" ></v-btn> -->
       <v-btn
         rounded="0"
-        v-if="nextStory"
+        v-if="nextStory && (currentStory?.a !== atoStore.atoAtual)"
         @click="abrirAto()"
         color="text"
         size="x-small"
@@ -258,9 +258,9 @@ function abrirAto() {
   atoStore.atosLidos.push(currentStory.value.a);
   if (!nextStory.value) return;
   atoStore.abrirAto(nextStory.value.a);
-  page.value++;
-  const router = useRouter();
-  router.push(`/_____--/${nextStory.value.a}`);
+  // page.value++;
+  // const router = useRouter();
+  // router.push(`/_____--/${nextStory.value.a}`);
 }
 </script>
 
